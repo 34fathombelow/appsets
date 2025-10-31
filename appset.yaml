@@ -1,0 +1,38 @@
+metadata:
+  name: anynamespaceapps
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - list:
+        elements:
+          - name: test
+            namespace: test
+            server: http://cluster-test:8001
+          - name: prod
+            namespace: prod
+            server: http://cluster-prod:8001
+  template:
+    metadata:
+      name: "{{.name}}-app-in-any-namespace"
+      namespace: app-in-any-namespace
+    spec:
+      source:
+        repoURL: https://github.com/34fathombelow/argocd-example-apps.git
+        path: guestbook
+        targetRevision: testing
+      destination:
+        server: "{{.server}}"
+        namespace: "{{.namespace}}-any"
+      project: app-in-any-namespace
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+    applicationsSync: sync
+  goTemplateOptions:
+    - missingkey=error
