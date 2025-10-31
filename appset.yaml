@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: anynamespaceapps
-  namespace: argocd
+  namespace: app-in-any-namespace
 spec:
   goTemplate: true
   generators:
